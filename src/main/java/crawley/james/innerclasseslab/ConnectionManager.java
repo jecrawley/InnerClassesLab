@@ -122,7 +122,15 @@ public class ConnectionManager {
 
         public String connect () {
 
-            return (IP.equals("closed.")) ? "Error: connection closed." : "Connection successful.";
+            return (IP.equals("closed")) ? "Error: connection closed." : "Connection successful.";
+        }
+
+        public String close () {
+
+            IP = "closed";
+            port = -1;
+
+            return "Connection terminated.";
         }
 
     }

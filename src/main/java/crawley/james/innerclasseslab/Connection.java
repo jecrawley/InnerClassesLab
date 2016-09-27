@@ -12,5 +12,6 @@ public interface Connection {
     void setProtocol (Protocol protocol);
     Protocol getProtocol ();
     String connect ();
+    String close ();
 
 }
