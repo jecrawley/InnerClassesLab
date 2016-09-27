@@ -1,5 +1,6 @@
 package crawley.james.innerclasseslab;
 
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -9,35 +10,49 @@ import static org.junit.Assert.*;
 public class ConnectionManagerTest {
 
     ConnectionManager connectionManager = new ConnectionManager(1);
-    Connection connection0 = connectionManager.getConnection(8888, "12.0.124.203", Protocol.HTTP);
-    Connection connection1 = connectionManager.getConnection(8888, "106.34.24.50", Protocol.HTTP);
 
     @Test
     public void getProtocolTest () {
 
-        assertEquals("The protocol should be \"HTTP\".", Protocol.HTTP, connection0.getProtocol());
+        connectionManager.addConnection(8888, "12.0.124.203", Protocol.HTTP);
+        Connection connection = connectionManager.getConnection(0);
+        assertEquals("The protocol should be \"HTTP\".", Protocol.HTTP, connection.getProtocol());
 
     }
 
     @Test
     public void getIPTest () {
 
-        assertEquals("The IP should be \"12.0.124.203\".", "12.0.124.203", connection0.getIP());
+        connectionManager.addConnection(8888, "12.0.124.203", Protocol.HTTP);
+        Connection connection = connectionManager.getConnection(0);
+        assertEquals("The IP should be \"12.0.124.203\".", "12.0.124.203", connection.getIP());
 
     }
 
     @Test
     public void getPortTest () {
 
-        assertEquals("The protocol should be 8888.", 8888, connection0.getPort());
+        connectionManager.addConnection(8888, "12.0.124.203", Protocol.HTTP);
+        Connection connection = connectionManager.getConnection(0);
+        assertEquals("The protocol should be 8888.", 8888, connection.getPort());
 
     }
 
     @Test
     public void requestingTooManyConnectionsTest () {
 
-        assertEquals("The protocol should be \"Null\".", null, connection1.getProtocol());
+        connectionManager.addConnection(8888, "12.0.124.203", Protocol.HTTP);
+        connectionManager.addConnection(8888, "106.34.24.50", Protocol.HTTP);
+        Connection connection = connectionManager.getConnection(1);
+        assertEquals("The protocol should be \"Null\".", null, connection);
 
+    }
+
+    @Test
+    public void connectToOpenConnection() {
+        connectionManager.addConnection(8888, "12.0.124.203", Protocol.HTTP);
+        Connection connection = connectionManager.getConnection(0);
+        assertEquals("The connection should connect sucessfully.", "Connection successful.", connection.connect());
     }
 /*
     @Test

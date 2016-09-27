@@ -17,18 +17,49 @@ public class ConnectionManager {
 
     }
 
-    Connection getConnection (int port, String IP, Protocol protocol) {
+    void addConnection(int port, String IP, Protocol protocol) {
 
-        Connection connection = new ManagedConnection(port, IP, protocol);;
+        Connection connection = new ManagedConnection(port, IP, protocol);
+        String message = "Error: too many connections.";
 
-        if (connection.connect().equals("Success")) {
+        if (connections < maxConnections) {
+
             connectionList.add(connection);
-        } else {
-            connection = new ManagedConnection(0, null, null);
+            connections++;
+            message = "Connection added.";
+
         }
 
-        return connection;
+        System.out.println(message);
+    }
 
+    void addConnection(int port, String IP) {
+
+        Connection connection = new ManagedConnection(port, IP, Protocol.HTTP);
+        String message = "Error: too many connections.";
+
+        if (connections < maxConnections) {
+
+            connectionList.add(connection);
+            connections++;
+            message = "Connection added.";
+
+        }
+
+        System.out.println(message);
+    }
+
+    Connection getConnection (int index) {
+
+        try {
+
+            return connectionList.get(index);
+
+        } catch (IndexOutOfBoundsException e){
+
+            return null;
+
+        }
     }
 
     private class ManagedConnection implements Connection {
@@ -53,6 +84,10 @@ public class ConnectionManager {
 
         public int getPort () {
 
+            if (port == -1) {
+                System.out.println("Error: connection closed.");
+            }
+
             return port;
         }
 
@@ -63,6 +98,10 @@ public class ConnectionManager {
         }
 
         public String getIP () {
+
+            if (IP.equals("closed")) {
+                System.out.println("Error: connection closed.");
+            }
 
             return IP;
 
@@ -80,22 +119,10 @@ public class ConnectionManager {
             return protocol;
 
         }
-        /*
-        public int getConnections () {
-
-            return 0;
-
-        }
-        */
 
         public String connect () {
 
-            if (connections < maxConnections) {
-                connections++;
-                return "Success";
-            } else {
-                return "Error: Too many connections";
-            }
+            return (IP.equals("closed.")) ? "Error: connection closed." : "Connection successful.";
         }
 
     }
