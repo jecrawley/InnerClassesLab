@@ -8,40 +8,42 @@ import static org.junit.Assert.*;
  */
 public class ConnectionManagerTest {
 
-    ConnectionManager connectionManager = new ConnectionManager(10);
-    Connection connection = connectionManager.getConnection(8888, "12.0.124.203", Protocol.HTTP);
+    ConnectionManager connectionManager = new ConnectionManager(1);
+    Connection connection0 = connectionManager.getConnection(8888, "12.0.124.203", Protocol.HTTP);
+    Connection connection1 = connectionManager.getConnection(8888, "106.34.24.50", Protocol.HTTP);
 
     @Test
     public void getProtocolTest () {
 
-        assertEquals("The protocol should be \"HTTP\".", Protocol.HTTP, connection.getProtocol());
+        assertEquals("The protocol should be \"HTTP\".", Protocol.HTTP, connection0.getProtocol());
 
     }
 
     @Test
     public void getIPTest () {
 
-        assertEquals("The IP should be \"12.0.124.203\".", "12.0.124.203", connection.getIP());
+        assertEquals("The IP should be \"12.0.124.203\".", "12.0.124.203", connection0.getIP());
 
     }
 
     @Test
     public void getPortTest () {
 
-        assertEquals("The protocol should be 8888.", 8888, connection.getPort());
+        assertEquals("The protocol should be 8888.", 8888, connection0.getPort());
+
+    }
+
+    @Test
+    public void requestingTooManyConnectionsTest () {
+
+        assertEquals("The protocol should be \"Null\".", null, connection1.getProtocol());
 
     }
 /*
     @Test
-    public void requestingTooManyConnectionsTest () {
-
-    }
-
-    @Test
     public void getFromClosedConnectionTest () {
 
     }
-    */
-
+*/
 
 }

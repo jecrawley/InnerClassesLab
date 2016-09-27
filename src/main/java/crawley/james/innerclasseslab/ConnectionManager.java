@@ -7,16 +7,27 @@ import java.util.*;
  */
 public class ConnectionManager {
 
-    private int connections;
-    List<ManagedConnection> connectionList = new ArrayList<ManagedConnection>();
+    private final int maxConnections;
+    private int connections = 0;
+    List<Connection> connectionList = new ArrayList<Connection>();
 
-    ConnectionManager (int connections) {
+    ConnectionManager (int maxConnections) {
+
+        this.maxConnections = maxConnections;
 
     }
 
     Connection getConnection (int port, String IP, Protocol protocol) {
 
-        return new ManagedConnection(port, IP, protocol);
+        Connection connection = new ManagedConnection(port, IP, protocol);;
+
+        if (connection.connect().equals("Success")) {
+            connectionList.add(connection);
+        } else {
+            connection = new ManagedConnection(0, null, null);
+        }
+
+        return connection;
 
     }
 
@@ -79,8 +90,12 @@ public class ConnectionManager {
 
         public String connect () {
 
-            return null;
-
+            if (connections < maxConnections) {
+                connections++;
+                return "Success";
+            } else {
+                return "Error: Too many connections";
+            }
         }
 
     }
